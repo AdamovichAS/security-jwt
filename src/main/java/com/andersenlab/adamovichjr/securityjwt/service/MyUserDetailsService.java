@@ -1,8 +1,5 @@
 package com.andersenlab.adamovichjr.securityjwt.service;
 
-import com.andersenlab.adamovichjr.securityjwt.model.MyUserDetails;
-import com.andersenlab.adamovichjr.securityjwt.model.Role;
-import com.andersenlab.adamovichjr.securityjwt.model.UserFromDataBase;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,20 +13,15 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        UserFromDataBase userFromDataBase = findUserFromDataBaseByUserName(userName);
-        return new MyUserDetails(userFromDataBase);
-//        return new User("foo","foo",true,true,true,true,new ArrayList<GrantedAuthority>());
+        return new User(
+                "user",
+                "123",
+                true,
+                true,
+                true,
+                true,
+                new ArrayList<>()
+        );
     }
 
-    private UserFromDataBase findUserFromDataBaseByUserName(String userName){
-        UserFromDataBase userFromDataBase = new UserFromDataBase();
-        userFromDataBase.setId(1L);
-        userFromDataBase.setUserName("user");
-        userFromDataBase.setPassword("123");
-        userFromDataBase.setActive(true);
-        userFromDataBase.setRole(Role.ADMIN);
-        userFromDataBase.setAddress("Minsk");
-        userFromDataBase.setMail("user@mail.ru");
-        return userFromDataBase;
-    }
 }

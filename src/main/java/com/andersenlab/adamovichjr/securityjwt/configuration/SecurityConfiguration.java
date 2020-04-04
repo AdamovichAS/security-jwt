@@ -18,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = true)
 @ComponentScan(basePackages = "com.andersenlab.adamovichjr.securityjwt")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private MyUserDetailsService myUserDetailsService;
-//    @Autowired
-//    private JwtAuthenticateProvider jwtAuthenticateProvider;
+
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
@@ -46,9 +46,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate").permitAll().
-                anyRequest().authenticated().and().formLogin().defaultSuccessUrl("/hello").and().
-                exceptionHandling().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                anyRequest().authenticated().and().
+                exceptionHandling().and().
+                sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
