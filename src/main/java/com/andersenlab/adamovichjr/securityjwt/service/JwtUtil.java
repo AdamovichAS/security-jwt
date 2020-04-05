@@ -1,5 +1,6 @@
 package com.andersenlab.adamovichjr.securityjwt.service;
 
+import com.andersenlab.adamovichjr.securityjwt.model.MyUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -36,18 +38,24 @@ public class JwtUtil {
     }
 
     public String generateToken(Authentication authentication) {
-        Map<String, Object> claims = (Map<String, Object>) authentication.getDetails();
-        return createToken(claims, authentication.getName());
+        MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("id",principal.getId());
+        claims.put("roles",principal.getAuthorities());
+        return createToken(claims, principal.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-
+        Map<String,Object> header = new HashMap<>();
+        header.put("type","jwt");
+        header.put("alg","HS256");
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setHeader(header)
                 .compact();
     }
 

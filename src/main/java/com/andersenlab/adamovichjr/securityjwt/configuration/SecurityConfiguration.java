@@ -1,7 +1,7 @@
 package com.andersenlab.adamovichjr.securityjwt.configuration;
 
-import com.andersenlab.adamovichjr.securityjwt.service.JwtAuthenticateProvider;
 import com.andersenlab.adamovichjr.securityjwt.filter.JwtRequestFilter;
+import com.andersenlab.adamovichjr.securityjwt.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,15 +19,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @ComponentScan(basePackages = "com.andersenlab.adamovichjr.securityjwt")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+
     @Autowired
-    private JwtAuthenticateProvider jwtAuthenticateProvider;
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(jwtAuthenticateProvider);
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Bean
