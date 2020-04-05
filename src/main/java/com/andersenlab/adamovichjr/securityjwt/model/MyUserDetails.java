@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class MyUserDetails extends User {
 
-    private Map fieldsFromUserToJWT = new HashMap<String,Object>(); //сюда передаем значения для JWT
+    private Long id;
 
     public MyUserDetails(UserFromDataBase userFromDataBase){
         super(userFromDataBase.getUserName(),
@@ -21,11 +21,12 @@ public class MyUserDetails extends User {
                 userFromDataBase.isActive(),
                 Collections.singletonList((GrantedAuthority) () -> "ROLE_" + userFromDataBase.getRole().toString())
         );
-        fieldsFromUserToJWT.put("id",userFromDataBase.getId());
-        fieldsFromUserToJWT.put("role",userFromDataBase.getRole());
+        this.id = userFromDataBase.getId();
+
     }
 
-    public Map getFieldsFromUserToJWT() {
-        return fieldsFromUserToJWT;
+
+    public Long getId() {
+        return id;
     }
 }
